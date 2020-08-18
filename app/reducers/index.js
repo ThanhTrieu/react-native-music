@@ -12,5 +12,5 @@ export default Object.assign(
   loadingReducer,
   loadingMusicReducer,
   musicReducer,
-  detailSongReducer
+  detailSongReducer,
 );

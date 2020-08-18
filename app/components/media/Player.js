@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
+import { Toast } from '@ant-design/react-native';
 import { connect } from 'react-redux';
 import AlbumArt from './AlbumArt';
 import TrackDetails from './TrackDetails';
@@ -18,12 +19,16 @@ class Player extends React.PureComponent {
       totalLength: 1,
       currentPosition: 0,
       repeatOn: false,
-      shuffleOn: false
+      shuffleOn: true
     };
   }
 
   setDuration(data) {
-    this.setState({ totalLength: Math.floor(data.duration) });
+    this.setState({ 
+      totalLength: Math.floor(data.duration),
+    }, () => {
+      this.setState({paused: false});
+    });
   }
 
   setTime(data) {
@@ -33,6 +38,7 @@ class Player extends React.PureComponent {
   seek(time) {
     time = Math.round(time);
     this.refs.audioElement && this.refs.audioElement.seek(time);
+    console.log(time);
     this.setState({
       currentPosition: time,
       paused: false,
@@ -54,7 +60,7 @@ class Player extends React.PureComponent {
   }
 
   onNextSong(id) {
-    this.props.nextSong(id, 1);
+    this.props.nextPrevSong(id, 1);
     this.refs.audioElement.seek(0);
     this.setState({
       currentPosition: 0,
@@ -63,7 +69,7 @@ class Player extends React.PureComponent {
   }
 
   onPreviousSong(id) {
-    this.props.prevSong(id, 0);
+    this.props.nextPrevSong(id, 0);
     this.refs.audioElement.seek(0);
     this.setState({
       currentPosition: 0,
@@ -80,6 +86,24 @@ class Player extends React.PureComponent {
     return JSON.stringify(obj) === JSON.stringify({});
   }
 
+  onEnd = () => {
+    if(this.state.repeatOn){
+      this.refs.audioElement.seek(0);
+      this.setState({
+        currentPosition: 0,
+        paused: false
+      });
+    } else if(this.state.shuffleOn) {
+      this.props.nextPrevSong(this.props.tracks.id, 1);
+    } else {
+      this.setState({paused: true});
+    }
+  }
+
+  videoError = () => {
+    Toast.fail('Load failed !!!');
+  }
+
 
   render() {
 
@@ -94,7 +118,8 @@ class Player extends React.PureComponent {
         paused={this.state.paused}   // Pauses playback entirely.
         resizeMode="cover"           // Fill the whole screen at aspect ratio.
         repeat={this.state.repeatOn}  
-        onLoadStart={this.loadStart} // Callback when video starts to load
+        // onLoadStart={this.loadStart} // Callback when video starts to load
+        // onReadyForDisplay={this.readyForPlay}
         onLoad={this.setDuration.bind(this)}    // Callback when video loads
         onProgress={this.setTime.bind(this)}    // Callback every ~250ms with currentTime
         onEnd={this.onEnd}           // Callback when playback finishes
@@ -122,10 +147,10 @@ class Player extends React.PureComponent {
             currentPosition={this.state.currentPosition}
           />
           <Controls
-            onPressRepeat={() => this.setState({ repeatOn: !this.state.repeatOn })}
+            onPressRepeat={() => this.setState({ repeatOn: !this.state.repeatOn, shuffleOn: false })}
             repeatOn={this.state.repeatOn}
             shuffleOn={this.state.shuffleOn}
-            onPressShuffle={() => this.setState({ shuffleOn: !this.state.shuffleOn })}
+            onPressShuffle={() => this.setState({ shuffleOn: !this.state.shuffleOn, repeatOn: false })}
             onPressPlay={() => this.setState({ paused: false })}
             onPressPause={() => this.setState({ paused: true })}
             onBack={this.onBack.bind(this)}
@@ -144,8 +169,7 @@ class Player extends React.PureComponent {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  nextSong: (id, status) => dispatch(getDetailSongById(id, status)),
-  prevSong: (id, status) => dispatch(getDetailSongById(id, status))
+  nextPrevSong: (id, status) => dispatch(getDetailSongById(id, status))
 })
 
 export default connect(null, mapDispatchToProps)(Player);

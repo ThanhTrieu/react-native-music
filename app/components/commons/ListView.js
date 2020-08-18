@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { List, Avatar, Divider, Button } from 'react-native-paper';
+import { List, Avatar, Divider } from 'react-native-paper';
 
 const ListView = ({data, navigation}) => {
-  // console.log(data);
   return(
     <>
       <List.Item

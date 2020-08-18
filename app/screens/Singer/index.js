@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-
-export default function Composer() {
+import ListBoxView from 'app/components/commons/ListBoxView';
+export default function Composer({route, navigation}) {
   return(
-    <View>
-      <Text>CCCC</Text>
-    </View>
+    <>
+      <ListBoxView typeCallApi="3" route={route} navigation={navigation} />
+    </>
   )
 }

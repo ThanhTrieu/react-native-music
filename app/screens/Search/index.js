@@ -1,12 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
-import CarouselComponent from 'app/components/home/Carousel';
+import SearchData from 'app/components/search/Search';
 import styles from './styles';
 
-export default function Home({ navigation }) {
+export default function Search({ navigation }) {
   return (
     <View style={styles.container}>
-      <CarouselComponent navigation={navigation} />
+      <SearchData navigation={navigation} />
     </View>
   );
 }

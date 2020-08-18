@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { detailSongData } from 'app/reselects/detailSongReselect';
 import { getDetailSongById } from 'app/actions/detailSongActions';
+import { startLoadingMusic } from 'app/reselects/loadingMusicReselect';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class MusicPlayer extends React.PureComponent {
 
@@ -26,13 +28,22 @@ class MusicPlayer extends React.PureComponent {
     Actions.pop();
     return true;
   };
+
   render() {
+    if(this.props.loadDataSong){
+      return(
+      <Spinner
+        visible={true}
+        textContent={'Loading...'}
+      />)
+    }
     return <Player navigation={this.props.navigation} tracks={this.props.infoSong} />
   }
 }
 
 const mapStateToProps = createStructuredSelector({
   infoSong: detailSongData,
+  loadDataSong: startLoadingMusic
 });
 
 const mapDispatchToProps = (dispatch) => ({

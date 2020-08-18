@@ -12,14 +12,14 @@ import Composer from 'app/screens/Composer';
 import Singer from 'app/screens/Singer';
 import Song from 'app/screens/Song';
 import Sound from 'app/screens/Player';
+import Search from 'app/screens/Search';
 import AuthorInformation from 'app/components/drawer/Author';
 
-const HomeStack = createStackNavigator();
+const HomeStack     = createStackNavigator();
 const CategoryStack = createStackNavigator();
 const ComposerStack = createStackNavigator();
-const SingerStack = createStackNavigator();
-const SongStack = createStackNavigator();
-
+const SingerStack   = createStackNavigator();
+const SongStack     = createStackNavigator();
 
 // tab navigation
 const Tab = createBottomTabNavigator();
@@ -50,6 +50,7 @@ const headerOptions = ({navigation}) => {
         icon="magnify"
         labelStyle={{ fontSize: 28 }}
         color="gray"
+        onPress={() => navigation.navigate('SearchData')}
       >
       </Button>
     )
@@ -64,6 +65,11 @@ function HomeStackScreen() {
         component={Home}
         options = {({ navigation }) => headerOptions({ navigation })}
       />
+      <HomeStack.Screen 
+        name="SearchData"
+        component={Search}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
     </HomeStack.Navigator>
   );
 }
@@ -74,6 +80,21 @@ function CategoryStackScreen() {
       <CategoryStack.Screen
         name="CategoryRoute"
         component={Category}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <CategoryStack.Screen 
+        name="SongRoute"
+        component={Song}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <CategoryStack.Screen   
+        name="SoundRoute"
+        component={Sound}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <CategoryStack.Screen 
+        name="SearchData"
+        component={Search}
         options = {({ navigation }) => headerOptions({ navigation })}
       />
     </CategoryStack.Navigator>
@@ -88,6 +109,21 @@ function ComposerStackScreen() {
         component={Composer}
         options = {({ navigation }) => headerOptions({ navigation })}
       />
+      <ComposerStack.Screen 
+        name="SongRoute"
+        component={Song}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <ComposerStack.Screen   
+        name="SoundRoute"
+        component={Sound}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <ComposerStack.Screen 
+        name="SearchData"
+        component={Search}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
     </ComposerStack.Navigator>
   )
 }
@@ -98,6 +134,21 @@ function SingerStackScreen () {
       <SingerStack.Screen 
         name="SingerRoute"
         component={Singer}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <SingerStack.Screen 
+        name="SongRoute"
+        component={Song}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <SingerStack.Screen   
+        name="SoundRoute"
+        component={Sound}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
+      <SingerStack.Screen 
+        name="SearchData"
+        component={Search}
         options = {({ navigation }) => headerOptions({ navigation })}
       />
     </SingerStack.Navigator>
@@ -117,6 +168,11 @@ function SongStackScreen () {
         component={Sound}
         options = {({ navigation }) => headerOptions({ navigation })}
       />
+       <SongStack.Screen 
+        name="SearchData"
+        component={Search}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
     </SongStack.Navigator>
   )
 }
@@ -127,7 +183,6 @@ function MyCustomTabNavigator () {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Category') {
@@ -139,7 +194,6 @@ function MyCustomTabNavigator () {
           } else if (route.name === 'Song') {
             iconName = focused ? 'music-circle' : 'music-circle-outline'
           }
-
           // You can return any component that you like here!
           return(
             <Button

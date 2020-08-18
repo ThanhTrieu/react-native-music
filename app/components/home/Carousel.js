@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Platform, View, ScrollView, Text, StatusBar, SafeAreaView } from 'react-native';
+import { Platform, View, ScrollView, Text, StatusBar, SafeAreaView, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -57,15 +57,19 @@ class CarouselComponent extends PureComponent {
     }
 
     
-    mainExample () {
+    ListCategory () {
         const { slider1ActiveSlide } = this.state;
         if(!this.props.categoryMusic){
             return null;
         }
+
         return (
             <View style={styles.exampleContainer}>
-                <Text style={styles.title}>Music Category</Text>
-                <Text style={styles.subtitle}>view all</Text>
+                <TouchableOpacity onPress={ () => this.props.navigation.navigate('Category') }>
+                    <Text style={styles.title}>Music Category</Text>
+                    <Text style={styles.subtitle}>view all</Text>
+                </TouchableOpacity>
+                
                 <Carousel
                   ref={c => this._slider1Ref = c}
                   data={this.props.categoryMusic}
@@ -103,15 +107,18 @@ class CarouselComponent extends PureComponent {
     }
     
    
-    momentumExample (number, title) {
+    ListSingers (number, title) {
       const { slider2ActiveSlide } = this.state;
       if(!this.props.topSinger){
         return null;
       }
       return (
           <View style={styles.exampleContainer}>
-              <Text style={styles.title}>Top singers</Text>
-              <Text style={styles.subtitle}>View all</Text>
+            <TouchableOpacity onPress={ () => this.props.navigation.navigate('Singer') }>
+                <Text style={styles.title}>Top singers</Text>
+                <Text style={styles.subtitle}>View all</Text>
+            </TouchableOpacity>
+              
               <Carousel
                 data={this.props.topSinger}
                 renderItem={this._renderItem}
@@ -152,7 +159,7 @@ class CarouselComponent extends PureComponent {
     }
     
     
-    layoutExample (type) {
+    ListComposers (type) {
         const isTinder = type === 'tinder';
         const { slider3ActiveSlide } = this.state;
         if(!this.props.topComposer){
@@ -160,8 +167,10 @@ class CarouselComponent extends PureComponent {
         }
         return (
             <View style={styles.exampleContainer}>
-                <Text style={styles.title}>Top composers</Text>
-                <Text style={styles.subtitle}>View all</Text>
+                <TouchableOpacity onPress={ () => this.props.navigation.navigate('Singer') }>
+                    <Text style={styles.title}>Top composers</Text>
+                    <Text style={styles.subtitle}>View all</Text>
+                </TouchableOpacity>
                 <Carousel
                   data={this.props.topComposer}
                   renderItem={isTinder ? this._renderLightItem : this._renderItem}
@@ -228,9 +237,9 @@ class CarouselComponent extends PureComponent {
     }
 
     render () {
-        const Categories = this.mainExample(1, 'Default layout | Loop | Autoplay | Parallax | Scale | Opacity | Pagination with tappable dots');
-        const Singers = this.momentumExample(2, 'Momentum | Left-aligned | Active animation| | Loop | Autoplay | Parallax | Scale | Opacity | Pagination with tappable dots');
-        const Composers = this.layoutExample('stack');
+        const Categories = this.ListCategory(1, 'Default layout | Loop | Autoplay | Parallax | Scale | Opacity | Pagination with tappable dots');
+        const Singers = this.ListSingers(2, 'Momentum | Left-aligned | Active animation| | Loop | Autoplay | Parallax | Scale | Opacity | Pagination with tappable dots');
+        const Composers = this.ListComposers('stack');
         return (
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>

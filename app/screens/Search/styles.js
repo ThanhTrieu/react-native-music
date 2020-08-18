@@ -6,10 +6,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text_author: {
-    color: 'black',
-    marginTop: 8
-  }
 });
 
 export default styles;
