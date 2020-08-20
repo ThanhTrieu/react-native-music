@@ -1,80 +1,62 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Searchbar,  RadioButton, Text, Divider } from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { useDebounce } from 'use-debounce';
+import { StyleSheet, SafeAreaView, ScrollView, View  } from 'react-native';
+import { Searchbar, Divider, List } from 'react-native-paper';
+import { searchMusic } from 'app/actions/searchActions';
+import { searchMusicData } from 'app/reselects/searchReselect';
 
-const Search = () => {
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [value, setValue] = React.useState('1');
+const Search = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = React.useState(''); 
+  const [keyword] = useDebounce(searchQuery, 500);
   const onChangeSearch = query => setSearchQuery(query);
+  const { listMusics } = useSelector(createStructuredSelector({
+    listMusics: searchMusicData
+  }));
+
+
+  const searchDataMusic = (key) => {
+    dispatch(searchMusic(key))
+  }
+
+  React.useEffect(() => {
+    if(keyword.length > 0){
+      searchDataMusic(keyword);
+    }
+  }, [keyword]);
+
+
   return (
-    <>
-      <View style={styles.container}>
-        {/* <View style={styles.conditionSearch}>
-          <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
-            <View style={styles.conditionItem}>
-              <Text>Song</Text>
-              <View>
-                <RadioButton value="1" />
-              </View>
-            </View>
-            <View style={styles.conditionItem}>
-              <Text>Singer</Text>
-              <View>
-                <RadioButton value="2" />
-              </View>
-            </View>
-            <View style={styles.conditionItem}>
-              <Text>composer</Text>
-              <View>
-                <RadioButton value="3" />
-              </View>
-            </View>
-          </RadioButton.Group>
-        </View> */}
-        <Searchbar
-          placeholder="Search"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-        <View style={styles.content}>
-          <Text>Apple</Text>
-          <Divider />
-          <Text>Orange</Text>
-          <Divider />
+    <SafeAreaView style={styles.container}>
+      <Searchbar
+        placeholder="Search"
+        onChangeText={onChangeSearch}
+        value={searchQuery}
+      />
+      <ScrollView>
+      { listMusics.map((item, index) => (
+        <View key={index}>
+          <List.Item
+            title={item.name_song}
+            description={item.name_singer}
+            onPress={() => navigation.navigate('SoundRoute',{ id: item.id_song })}
+          />
+          <Divider/>
         </View>
-      </View>
-    </>
+      )) }
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexWrap: 'wrap',
+    flex:1,
     justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  conditionSearch: {
-    flexDirection: 'row',
-    marginTop: 1,
-    elevation: 7, 
-    shadowColor: '#d9d9d9',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    backgroundColor: '#ffffff',
     alignSelf: 'stretch',
     textAlign: 'center',
-  },
-  conditionItem: {
-    flexWrap: 'nowrap',
-    justifyContent: 'center',
-    marginLeft: 20,
-  },
-  content: {
-    flex: 1,
-    flexWrap: 'wrap',
-    marginTop: 10
   }
 });
 

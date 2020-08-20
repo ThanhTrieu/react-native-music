@@ -65,6 +65,11 @@ function HomeStackScreen() {
         component={Home}
         options = {({ navigation }) => headerOptions({ navigation })}
       />
+      <HomeStack.Screen   
+        name="SoundRoute"
+        component={Sound}
+        options = {({ navigation }) => headerOptions({ navigation })}
+      />
       <HomeStack.Screen 
         name="SearchData"
         component={Search}

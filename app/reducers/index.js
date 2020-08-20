@@ -6,6 +6,7 @@ import * as loadingMusicReducer from './loadingMusicReducer';
 import * as loginReducer from './loginReducer';
 import * as musicReducer from './musicReducer';
 import * as detailSongReducer from './detailSongReducer';
+import * as searchMusicReducer from './searchReducer';
 
 export default Object.assign(
   loginReducer,
@@ -13,4 +14,5 @@ export default Object.assign(
   loadingMusicReducer,
   musicReducer,
   detailSongReducer,
+  searchMusicReducer
 );

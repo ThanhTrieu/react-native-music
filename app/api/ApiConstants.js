@@ -8,6 +8,7 @@ const ApiConstants = {
   LIST_SONG_PAGING: 'api/music/v1/list-song',
   DETAIL_SONG_BY_ID: 'api/music/v1/detail-song',
   LIST_CATEGORY_COMPOSER_SINGER_PAGING: 'api/music/v1/list-category-composer-singer',
+  SEARCH_MUSIC: 'api/music/v1/search'
 };
 
 export default ApiConstants;
