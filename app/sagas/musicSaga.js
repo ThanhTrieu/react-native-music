@@ -6,17 +6,24 @@ import musicApi from 'app/api/methods/music';
 import * as types from '../actions/types';
 
 
-function* getDataMusicAsync() {
+function* getDataMusicAsync({loading}) {
   try {
-    yield put(musicActions.loadingGetDataMusic()); // loading data
+    if(loading){
+      yield put(musicActions.loadingGetDataMusic()); // loading data
+    }
+    
     // call api
     const response = yield call(musicApi);
     if(response){
       yield put(musicActions.getDataMusicSuccess(response));
-      yield put(musicActions.stopLoadingGetDataMusic())
+      if(loading){
+        yield put(musicActions.stopLoadingGetDataMusic());
+      }
     } else {
       yield put(musicActions.getDataMusicFailure('Not found data'));
-      yield put(musicActions.stopLoadingGetDataMusic());
+      if(loading){
+        yield put(musicActions.stopLoadingGetDataMusic());
+      }
       setTimeout(() => {
         Alert.alert('BoilerPlate', 'Not found data');
       }, 200);

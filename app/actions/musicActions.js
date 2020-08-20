@@ -13,9 +13,10 @@ export function stopLoadingGetDataMusic() {
   }
 }
 
-export function getDataMusic() {
+export function getDataMusic(loading = true) {
   return {
-    type: types.GET_DATA_MUSIC
+    type: types.GET_DATA_MUSIC,
+    loading
   }
 }
 

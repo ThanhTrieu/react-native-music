@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Platform, View, ScrollView, Text, StatusBar, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Platform, View, ScrollView, Text, StatusBar, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -26,6 +26,7 @@ class CarouselComponent extends PureComponent {
             slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
             slider2ActiveSlide: SLIDER_2_FIRST_ITEM,
             slider3ActiveSlide: SLIDER_3_FIRST_ITEM,
+            refreshing: false
         };
     }
 
@@ -236,6 +237,13 @@ class CarouselComponent extends PureComponent {
         );
     }
 
+    onRefresh() {
+        this.setState({refreshing: true}, () => {
+            this.props.getDataHomeScreen(false);
+            this.setState({refreshing: false});
+        });
+    }
+
     render () {
         const Categories = this.ListCategory(1, 'Default layout | Loop | Autoplay | Parallax | Scale | Opacity | Pagination with tappable dots');
         const Singers = this.ListSingers(2, 'Momentum | Left-aligned | Active animation| | Loop | Autoplay | Parallax | Scale | Opacity | Pagination with tappable dots');
@@ -259,13 +267,13 @@ class CarouselComponent extends PureComponent {
                             style={styles.scrollview}
                             scrollEventThrottle={200}
                             directionalLockEnabled={true}
+                            refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh()}/>}
                         >
                             { Categories }
                             { Singers }
                             { Composers }
                         </ScrollView>
                     )}
-                    
                 </View>
             </SafeAreaView>
         );
@@ -280,7 +288,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-    getDataHomeScreen: () => dispatch(getDataMusic())
+    getDataHomeScreen: (loading) => dispatch(getDataMusic(loading))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarouselComponent);
